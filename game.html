@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <title>1to50</title>
+    <style>
+        #oneToFifty button {
+            width: 60px;
+            height: 60px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+    <script type="text/javascript">
+
+
+        function shuffleRandom(f,n){
+            var ar = new Array();
+            var temp;
+            var rnum;
+
+            for(var i=f; i<=n; i++){
+                ar.push(i);
+            }
+            for(var i=0; i< ar.length ; i++)
+            {
+                rnum = Math.floor(Math.random() *ar.length);
+                temp = ar[i];
+                ar[i] = ar[rnum];
+                ar[rnum] = temp;
+            }
+            return ar;
+        }
+
+        var array_1to25 = shuffleRandom(1,25);
+        var array_26to50 = shuffleRandom(26,50);
+        var start;
+        var time;
+
+        $(document).ready( function() {
+            for(var i=0;i<5;i++){
+                $('#oneToFifty').append(`<tr><td><button>${array_1to25[i*5]}</button></td><td><button>
+                    ${array_1to25[i*5+1]}</button></td><td><button>
+                    ${array_1to25[i*5+2]}</button></td><td><button>
+                    ${array_1to25[i*5+3]}</button></td><td><button>
+                    ${array_1to25[i*5+4]}</button></td></tr>`)
+            }
+            var value = 1;
+            $('#oneToFifty button').click(function() {
+                if($(this).text()==value){
+                    $(this).fadeOut(500);
+                    $(this).fadeIn(500).text(array_26to50[value-1]);
+
+                    value++;
+                    $("#value").text(`다음누를번호 : ${value}`)
+                    if(value>=27){
+                        $(this).fadeOut(500);
+                        $(this).fadeIn(500).text("");
+                        if(value==51){
+                            clearInterval(time);
+                        }
+                    }
+                } else {
+                    $(this).effect("shake");
+                }
+            });
+
+            $('#start').click(function () {
+                start = new Date;
+                time = setInterval(function() {$('#time').text(`걸린시간 : ${(new Date - start) / 1000}`); }, 10);
+            });
+
+        });
+
+    </script>
+</head>
+<body align="center">
+    <h1>1to50 게임</h1>
+    <span id="time">시작전</span>
+    <table id="oneToFifty" align="center">
+
+    </table>
+    <div id="value" style="width: 100%;"></div>
+    <button id="start">start</button>
+
+</body>
+</html>
